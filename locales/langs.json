@@ -1,0 +1,34 @@
+{
+  "supportedLngs": [
+    "en",
+    "es",
+    "fr",
+    "de",
+    "it",
+    "pt",
+    "ru",
+    "jp",
+    "ch",
+    "hi",
+    "bn",
+    "ar",
+    "tr",
+    "pl"
+  ],
+  "langNames": {
+    "en": "Inglés",
+    "es": "Español",
+    "fr": "Francés",
+    "de": "Alemán",
+    "it": "Italiano",
+    "pt": "Portugués",
+    "ru": "Ruso",
+    "jp": "Japonés",
+    "ch": "Chino",
+    "hi": "Hindi",
+    "bn": "Bengalí",
+    "ar": "Árabe",
+    "tr": "Turco",
+    "pl": "Polaco"
+  }
+}

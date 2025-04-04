@@ -2,8 +2,11 @@ const path = require('path');
 const i18next = require('i18next');
 const Backend = require('i18next-fs-backend');
 const middleware = require('i18next-http-middleware');
+const fs = require('fs');
 
 const projectRoot = path.resolve(__dirname, '../../');
+const langsPath = path.join(projectRoot, 'locales/langs.json');
+const langsData = JSON.parse(fs.readFileSync(langsPath, 'utf8'));
 
 i18next
   .use(Backend)
@@ -13,7 +16,7 @@ i18next
       loadPath: path.join(projectRoot, 'locales/{{lng}}.json'),
     },
     fallbackLng: 'es',
-    supportedLngs: ['en', 'es'],
+    supportedLngs: langsData.supportedLngs,
     detection: {
       lookupHeader: 'accept-language',
       lookupQuerystring: 'lang',
@@ -24,4 +27,4 @@ i18next
     },
   });
 
-module.exports = { i18next, middleware };
+module.exports = { i18next, middleware, langNames: langsData.langNames };
