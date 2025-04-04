@@ -8,6 +8,8 @@ const projectRoot = path.resolve(__dirname, '../../');
 const langsPath = path.join(projectRoot, 'locales/langs.json');
 const langsData = JSON.parse(fs.readFileSync(langsPath, 'utf8'));
 
+console.log(langsData.supportedLngs)
+
 i18next
   .use(Backend)
   .use(middleware.LanguageDetector)

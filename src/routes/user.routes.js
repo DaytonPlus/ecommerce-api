@@ -1,4 +1,5 @@
 const express = require('express');
+const { authMiddleware } = require('../middleware/auth.middleware');
 const { adminMiddleware } = require('../middleware/admin.middleware');
 const {
   createUserController,
@@ -11,28 +12,22 @@ const {
 
 const router = express.Router();
 
-// Aplica el middleware authMiddleware a las rutas siguientes
-router.use(authMiddleware);
+// Ruta para obtener información del propio usuario (requiere autenticación)
+router.get('/me', authMiddleware, getUserMeController);
 
-// Ruta para obtener informacion del propio usuario
-router.get('/me', getUserMeController);
+// Ruta para crear un nuevo usuario (requiere ser administrador)
+router.post('/', adminMiddleware, createUserController);
 
-// Aplica el middleware adminMiddleware a las rutas siguientes
-router.use(adminMiddleware);
+// Ruta para obtener todos los usuarios (requiere ser administrador)
+router.get('/', adminMiddleware, getUsersController);
 
-// Ruta para crear un nuevo usuario
-router.post('/', createUserController);
+// Ruta para obtener un usuario específico por ID (requiere ser administrador)
+router.get('/:id', adminMiddleware, getUserController);
 
-// Ruta para obtener todos los usuarios
-router.get('/', getUsersController);
+// Ruta para actualizar un usuario por ID (requiere ser administrador)
+router.put('/:id', adminMiddleware, updateUserController);
 
-// Ruta para obtener un usuario específico por ID
-router.get('/:id', getUsersController);
-
-// Ruta para actualizar un usuario por ID
-router.put('/:id', updateUserController);
-
-// Ruta para eliminar un usuario por ID
-router.delete('/:id', deleteUserController);
+// Ruta para eliminar un usuario por ID (requiere ser administrador)
+router.delete('/:id', adminMiddleware, deleteUserController);
 
 module.exports = router;

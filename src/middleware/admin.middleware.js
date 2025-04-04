@@ -1,7 +1,17 @@
+const jwt = require('jsonwebtoken');
 const { pool } = require('../config/database');
 
 const adminMiddleware = async (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  
+  if (!token) {
+    return res.status(401).json({ message: req.t('no_token_provided') });
+  }
+
   try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+
     const userId = req.user.userId;
     const user = await pool.query('SELECT * FROM usuarios WHERE id = $1', [userId]);
     if (!user.rows[0] || !user.rows[0].is_admin) {
@@ -14,4 +24,4 @@ const adminMiddleware = async (req, res, next) => {
   }
 };
 
-module.exports = adminMiddleware;
+module.exports = { adminMiddleware };

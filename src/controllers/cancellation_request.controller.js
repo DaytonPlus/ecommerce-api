@@ -120,11 +120,10 @@ module.exports = {
   getAllCancellationRequests,
   getCancellationRequestById,
   updateCancellationRequestStatus,
-
   // Controladores
   createCancellationRequestController,
   getAllCancellationRequestsController,
-  getCancellationRequestController,
+  getCancellationRequestByIdController,
   updateCancellationRequestStatusController,
   getAllCancellationRequestsMeController
 };

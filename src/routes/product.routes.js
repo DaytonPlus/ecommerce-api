@@ -12,28 +12,22 @@ const {
 
 const router = express.Router();
 
-// Aplica el middleware de autenticación a las rutas siguientes
-router.use(authMiddleware);
-
-// Ruta para obtener todos los productos
+// Ruta para obtener todos los productos (accesible para todos)
 router.get('/', getProductsController);
 
-// Ruta para obtener un producto específico
+// Ruta para obtener un producto específico (accesible para todos)
 router.get('/:id', getProductController);
 
-// Ruta para buscar productos
+// Ruta para buscar productos (accesible para todos)
 router.get('/search', searchProductsController);
 
-// Aplica el middleware de administrador a las siguientes rutas
-router.use(adminMiddleware);
+// Ruta para crear un nuevo producto (requiere ser administrador)
+router.post('/', adminMiddleware, createProductController);
 
-// Ruta para crear un nuevo producto
-router.post('/', createProductController);
+// Ruta para actualizar un producto por ID (requiere ser administrador)
+router.put('/:id', adminMiddleware, updateProductController);
 
-// Ruta para actualizar un producto por ID
-router.put('/:id', updateProductController);
-
-// Ruta para eliminar un producto por ID
-router.delete('/:id', deleteProductController);
+// Ruta para eliminar un producto por ID (requiere ser administrador)
+router.delete('/:id', adminMiddleware, deleteProductController);
 
 module.exports = router;

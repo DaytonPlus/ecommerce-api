@@ -16,41 +16,34 @@ const {
 
 const router = express.Router();
 
-// Aplica el middleware de autenticación a las siguientes rutas
-router.use(authMiddleware);
+// Ruta para agregar un artículo al carrito (requiere autenticación)
+router.post('/add', authMiddleware, addItemToUserCartController);
 
-// Ruta para agregar un artículo al carrito
-router.post('/add', addItemToUserCartController);
+// Ruta para obtener los artículos del carrito (requiere autenticación)
+router.get('/user', authMiddleware, getUserCartItemsController);
 
-// Ruta para btener los artículos del carrito
-router.get('/', getUserCartItemsController);
+// Ruta para eliminar el carrito completo (requiere autenticación)
+router.delete('/user', authMiddleware, deleteUserCartController);
 
-// Ruta para eliminar el carrito completo
-router.delete('/', deleteUserCartController);
+// Ruta para eliminar un artículo del carrito (requiere autenticación)
+router.delete('/user/remove/:itemId', authMiddleware, removeItemFromUserCartController);
 
-// Ruta para eliminar un artículo del carrito
-router.delete('/remove/:itemId', removeItemFromUserCartController);
+// Ruta para convertir el carrito en una orden (requiere autenticación)
+router.post('/user/checkout', authMiddleware, convertCartToOrderController);
 
-// Ruta para convertir el carrito en una orden
-router.post('/checkout', convertCartToOrderController);
+// Ruta para obtener todos los carritos (requiere ser administrador)
+router.get('/', adminMiddleware, getCartsController);
 
+// Ruta para obtener un carrito específico por ID (requiere ser administrador)
+router.get('/:id', adminMiddleware, getCartController);
 
-// Aplica el middleware de administrador a las siguientes rutas
-router.use(adminMiddleware);
+// Ruta para crear un nuevo carrito (requiere ser administrador)
+router.post('/', adminMiddleware, createCartController);
 
-// Ruta para obtener todos los carritos
-router.get('/', getCartsController);
+// Ruta para actualizar un carrito por ID (requiere ser administrador)
+router.put('/:id', adminMiddleware, updateCartController);
 
-// Ruta para obtener un carrito específico por ID
-router.get('/:id', getCartController);
-
-// Ruta para crear un nuevo carrito
-router.post('/', createCartController);
-
-// Ruta para actualizar un carrito por ID
-router.put('/:id', updateCartController);
-
-// Ruta para eliminar un carrito por ID
-router.delete('/:id', deleteCartController);
+// Ruta para eliminar un carrito por ID (requiere ser administrador)
+router.delete('/:id', adminMiddleware, deleteCartController);
 
 module.exports = router;

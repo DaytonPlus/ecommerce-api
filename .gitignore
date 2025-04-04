@@ -1,2 +1,4 @@
-/wiki/*
+wiki/
+docs/
+node_modules/
 .env

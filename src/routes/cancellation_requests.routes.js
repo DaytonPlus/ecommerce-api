@@ -11,25 +11,19 @@ const {
 
 const router = express.Router();
 
-// Aplica el middleware de autenticación a las rutas siguientes
-router.use(authMiddleware);
-
-// Ruta para crear una solicitud de cancelación
-router.post('/orders/:orderId', createCancellationRequestController);
+// Ruta para crear una solicitud de cancelación (requiere autenticación)
+router.post('/orders/:orderId', authMiddleware, createCancellationRequestController);
 
 // Ruta para obtener las solicitudes de cancelación del usuario autenticado
-router.get('/me', getAllCancellationRequestsMeController);
+router.get('/me', authMiddleware, getAllCancellationRequestsMeController);
 
-// Aplica el middleware de administrador a las rutas siguientes
-router.use(adminMiddleware);
+// Ruta para obtener todas las solicitudes de cancelación (requiere ser administrador)
+router.get('/', adminMiddleware, getAllCancellationRequestsController);
 
-// Ruta para obtener todas las solicitudes de cancelación
-router.get('/', getAllCancellationRequestsController);
+// Ruta para obtener una solicitud de cancelación por ID (requiere ser administrador)
+router.get('/:id', adminMiddleware, getCancellationRequestByIdController);
 
-// Ruta para obtener una solicitud de cancelación por ID
-router.get('/:id', getCancellationRequestByIdController);
-
-// Ruta para actualizar el estado de una solicitud de cancelación
-router.put('/:id', updateCancellationRequestStatusController);
+// Ruta para actualizar el estado de una solicitud de cancelación (requiere ser administrador)
+router.put('/:id', adminMiddleware, updateCancellationRequestStatusController);
 
 module.exports = router;

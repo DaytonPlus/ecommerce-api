@@ -1,5 +1,5 @@
 const { pool } = require('../config/database');
-const { createUserInDB, findUserByEmail } = require('../user.controller');
+const { createUserInDB, findUserByEmail } = require('./user.controller');
 
 // Controlador para registro
 const register = async (req, res) => {
@@ -17,7 +17,7 @@ const register = async (req, res) => {
     res.status(201).json({ token });
   } catch (error) {
     console.log(error);
-    res.status(400).json({ message: req.t('error_registering_user') });
+    res.status(500).json({ message: req.t('error_registering_user') });
   }
 };
 
@@ -46,10 +46,6 @@ const login = async (req, res) => {
 
 
 module.exports = {
-  // Funciones
-  createUser,
-  findUserByEmail,
-
   // Controladores
   register,
   login

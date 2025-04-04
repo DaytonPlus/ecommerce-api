@@ -1,4 +1,4 @@
-const express = require('express');
+const { Router } = require('express');
 const { authMiddleware } = require('../middleware/auth.middleware');
 const { adminMiddleware } = require('../middleware/admin.middleware');
 const { 
@@ -9,27 +9,20 @@ const {
   deleteCategoryController
 } = require('../controllers/category.controller');
 
-const router = express.Router();
-
-// Aplica el middleware de autenticación a las rutas siguientes
-router.use(authMiddleware);
-
-// Ruta para obtener todas las categorías
+const router = Router();
+// Ruta para obtener todas las categorías (accesible para todos)
 router.get('/', getCategoriesController);
 
-// Ruta para obtener una categoría específica por ID
+// Ruta para obtener una categoría específica por ID (accesible para todos)
 router.get('/:id', getCategoryController);
 
-// Aplica el middleware de administrador a las rutas siguientes
-router.use(adminMiddleware);
+// Ruta para crear una nueva categoría (requiere ser administrador)
+router.post('/', adminMiddleware, createCategoryController);
 
-// Ruta para crear una nueva categoría
-router.post('/', createCategoryController);
+// Ruta para actualizar una categoría por ID (requiere ser administrador)
+router.put('/:id', adminMiddleware, updateCategoryController);
 
-// Ruta para actualizar una categoría por ID
-router.put('/:id', updateCategoryController);
-
-// Ruta para eliminar una categoría por ID
-router.delete('/:id', deleteCategoryController);
+// Ruta para eliminar una categoría por ID (requiere ser administrador)
+router.delete('/:id', adminMiddleware, deleteCategoryController);
 
 module.exports = router;

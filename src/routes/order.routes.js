@@ -13,31 +13,25 @@ const {
 
 const router = express.Router();
 
-// Aplica el middleware de autenticación a las rutas siguientes
-router.use(authMiddleware);
-
-// Ruta para crear una nueva orden
-router.post('/', createOrderController);
+// Ruta para crear una nueva orden (requiere autenticación)
+router.post('/', authMiddleware, createOrderController);
 
 // Ruta para obtener las órdenes del usuario autenticado
-router.get('/me', getUserOrdersController);
+router.get('/me', authMiddleware, getUserOrdersController);
 
-// Ruta para solicitar cancelar una orden
-router.post('/cancel/:id', requestCancelOrderController);
+// Ruta para solicitar cancelar una orden (requiere autenticación)
+router.post('/cancel/:id', authMiddleware, requestCancelOrderController);
 
-// Aplica el middleware de administrador a las rutas siguientes
-router.use(adminMiddleware);
+// Ruta para obtener todas las órdenes (requiere ser administrador)
+router.get('/', adminMiddleware, getOrdersController);
 
-// Ruta para btener todas las órdenes
-router.get('/', getOrdersController);
+// Ruta para obtener una orden específica por ID (requiere ser administrador)
+router.get('/:id', adminMiddleware, getOrderController);
 
-// Ruta para btener una orden específica por ID
-router.get('/:id', getOrderController);
+// Ruta para actualizar una orden por ID (requiere ser administrador)
+router.put('/:id', adminMiddleware, updateOrderController);
 
-// Ruta para ctualizar una orden por ID
-router.put('/:id', updateOrderController);
-
-// Ruta para eliminar una orden por ID
-router.delete('/:id', deleteOrderController);
+// Ruta para eliminar una orden por ID (requiere ser administrador)
+router.delete('/:id', adminMiddleware, deleteOrderController);
 
 module.exports = router;
