@@ -1,32 +1,33 @@
-const path = require('path');
-const i18next = require('i18next');
-const Backend = require('i18next-fs-backend');
-const middleware = require('i18next-http-middleware');
-const fs = require('fs');
+import i18next from 'i18next';
+import Backend from 'i18next-fs-backend';
+import middleware from 'i18next-http-middleware';
+import path from 'path';
+import fs from 'fs';
 
-const projectRoot = path.resolve(__dirname, '../../');
-const langsPath = path.join(projectRoot, 'locales/langs.json');
-const langsData = JSON.parse(fs.readFileSync(langsPath, 'utf8'));
+const locales = path.join(process.cwd(), 'locales');
+const langsPath = path.join(locales, 'langs.json');
+const { langNames, supportedLngs } = JSON.parse(fs.readFileSync(langsPath, 'utf8'));
 
-console.log(langsData.supportedLngs)
+const initI18n = async () => {
+  await i18next
+    .use(Backend)
+    .use(middleware.LanguageDetector)
+    .init({
+      backend: {
+        loadPath: path.join(locales, '{{lng}}.json'),
+      },
+      detection: {
+        order: ['querystring', 'cookie'],
+        caches: ['cookie'],
+        lookupHeader: 'accept-language',
+        lookupQuerystring: 'lang',
+        lookupCookie: 'i18next',
+      },
+      fallbackLng: 'es',
+      preload: supportedLngs,
+    });
 
-i18next
-  .use(Backend)
-  .use(middleware.LanguageDetector)
-  .init({
-    backend: {
-      loadPath: path.join(projectRoot, 'locales/{{lng}}.json'),
-    },
-    fallbackLng: 'es',
-    supportedLngs: langsData.supportedLngs,
-    detection: {
-      lookupHeader: 'accept-language',
-      lookupQuerystring: 'lang',
-      lookupCookie: 'i18next',
-    },
-    interpolation: {
-      escapeValue: false,
-    },
-  });
+  return { i18next, middleware, langNames, supportedLngs };
+};
 
-module.exports = { i18next, middleware, langNames: langsData.langNames };
+export default initI18n;

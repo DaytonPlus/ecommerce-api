@@ -1,33 +1,16 @@
-const express = require('express');
-const { authMiddleware } = require('../middleware/auth.middleware');
-const { adminMiddleware } = require('../middleware/admin.middleware');
-const {
-  createUserController,
-  getUsersController,
-  getUserController,
-  updateUserController,
-  deleteUserController,
-  getUserMeController
-} = require('../controllers/user.controller');
+import { Router } from 'express';
+import { authMiddleware } from '../middleware/auth.middleware.js';
+import { adminMiddleware } from '../middleware/admin.middleware.js';
+import UserController from '../controllers/user.controller.js';
 
-const router = express.Router();
+const router = Router();
 
-// Ruta para obtener información del propio usuario (requiere autenticación)
-router.get('/me', authMiddleware, getUserMeController);
+router.get('/me', authMiddleware, UserController.getUserMe);
 
-// Ruta para crear un nuevo usuario (requiere ser administrador)
-router.post('/', adminMiddleware, createUserController);
+router.post('/', adminMiddleware, UserController.createUser);
+router.get('/', adminMiddleware, UserController.getUsers);
+router.get('/:id', adminMiddleware, UserController.getUser);
+router.put('/:id', adminMiddleware, UserController.updateUser);
+router.delete('/:id', adminMiddleware, UserController.deleteUser);
 
-// Ruta para obtener todos los usuarios (requiere ser administrador)
-router.get('/', adminMiddleware, getUsersController);
-
-// Ruta para obtener un usuario específico por ID (requiere ser administrador)
-router.get('/:id', adminMiddleware, getUserController);
-
-// Ruta para actualizar un usuario por ID (requiere ser administrador)
-router.put('/:id', adminMiddleware, updateUserController);
-
-// Ruta para eliminar un usuario por ID (requiere ser administrador)
-router.delete('/:id', adminMiddleware, deleteUserController);
-
-module.exports = router;
+export default router;

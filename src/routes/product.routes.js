@@ -1,33 +1,16 @@
-const express = require('express');
-const { authMiddleware } = require('../middleware/auth.middleware');
-const { adminMiddleware } = require('../middleware/admin.middleware');
-const {
-  getProductsController,
-  getProductController,
-  createProductController,
-  updateProductController,
-  deleteProductController,
-  searchProductsController
-} = require('../controllers/product.controller');
+import { Router } from 'express';
+import { authMiddleware } from '../middleware/auth.middleware.js';
+import { adminMiddleware } from '../middleware/admin.middleware.js';
+import ProductController from '../controllers/product.controller.js';
 
-const router = express.Router();
+const router = Router();
 
-// Ruta para obtener todos los productos (accesible para todos)
-router.get('/', getProductsController);
+router.get('/', ProductController.getProducts);
+router.get('/:id', ProductController.getProduct);
+router.get('/search', ProductController.searchProducts);
 
-// Ruta para obtener un producto específico (accesible para todos)
-router.get('/:id', getProductController);
+router.post('/', adminMiddleware, ProductController.createProduct);
+router.put('/:id', adminMiddleware, ProductController.updateProduct);
+router.delete('/:id', adminMiddleware, ProductController.deleteProduct);
 
-// Ruta para buscar productos (accesible para todos)
-router.get('/search', searchProductsController);
-
-// Ruta para crear un nuevo producto (requiere ser administrador)
-router.post('/', adminMiddleware, createProductController);
-
-// Ruta para actualizar un producto por ID (requiere ser administrador)
-router.put('/:id', adminMiddleware, updateProductController);
-
-// Ruta para eliminar un producto por ID (requiere ser administrador)
-router.delete('/:id', adminMiddleware, deleteProductController);
-
-module.exports = router;
+export default router;

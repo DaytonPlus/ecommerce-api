@@ -2,33 +2,17 @@
   "supportedLngs": [
     "en",
     "es",
-    "fr",
     "de",
-    "it",
-    "pt",
     "ru",
     "jp",
-    "ch",
-    "hi",
-    "bn",
-    "ar",
-    "tr",
-    "pl"
+    "ch"
   ],
   "langNames": {
-    "en": "Inglés",
-    "es": "Español",
-    "fr": "Francés",
-    "de": "Alemán",
-    "it": "Italiano",
-    "pt": "Portugués",
+    "en": "InglÃ©s",
+    "es": "EspaÃ±ol",
+    "de": "AlemÃ¡n",
     "ru": "Ruso",
-    "jp": "Japonés",
-    "ch": "Chino",
-    "hi": "Hindi",
-    "bn": "Bengalí",
-    "ar": "Árabe",
-    "tr": "Turco",
-    "pl": "Polaco"
+    "jp": "JaponÃ©s",
+    "ch": "Chino"
   }
 }

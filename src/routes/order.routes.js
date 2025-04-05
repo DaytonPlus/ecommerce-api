@@ -1,37 +1,17 @@
-const express = require('express');
-const { authMiddleware } = require('../middleware/auth.middleware');
-const { adminMiddleware } = require('../middleware/admin.middleware');
-const { 
-  createOrderController, 
-  getUserOrdersController, 
-  getOrdersController, 
-  getOrderController, 
-  updateOrderController, 
-  deleteOrderController, 
-  requestCancelOrderController
-} = require('../controllers/order.controller');
+import { Router } from 'express';
+import { authMiddleware } from '../middleware/auth.middleware.js';
+import { adminMiddleware } from '../middleware/admin.middleware.js';
+import OrderController from '../controllers/order.controller.js';
 
-const router = express.Router();
+const router = Router();
 
-// Ruta para crear una nueva orden (requiere autenticación)
-router.post('/', authMiddleware, createOrderController);
+router.post('/', authMiddleware, OrderController.createOrder);
+router.get('/me', authMiddleware, OrderController.getUserOrders);
+router.post('/cancel/:id', authMiddleware, OrderController.requestCancelOrder);
 
-// Ruta para obtener las órdenes del usuario autenticado
-router.get('/me', authMiddleware, getUserOrdersController);
+router.get('/', adminMiddleware, OrderController.getOrders);
+router.get('/:id', adminMiddleware, OrderController.getOrder);
+router.put('/:id', adminMiddleware, OrderController.updateOrder);
+router.delete('/:id', adminMiddleware, OrderController.deleteOrder);
 
-// Ruta para solicitar cancelar una orden (requiere autenticación)
-router.post('/cancel/:id', authMiddleware, requestCancelOrderController);
-
-// Ruta para obtener todas las órdenes (requiere ser administrador)
-router.get('/', adminMiddleware, getOrdersController);
-
-// Ruta para obtener una orden específica por ID (requiere ser administrador)
-router.get('/:id', adminMiddleware, getOrderController);
-
-// Ruta para actualizar una orden por ID (requiere ser administrador)
-router.put('/:id', adminMiddleware, updateOrderController);
-
-// Ruta para eliminar una orden por ID (requiere ser administrador)
-router.delete('/:id', adminMiddleware, deleteOrderController);
-
-module.exports = router;
+export default router;

@@ -1,29 +1,15 @@
-const express = require('express');
-const {
-  getBalanceMeController,
-  getBalanceController,
-  updateBalanceController,
-  createInitialBalanceController,
-  deleteBalanceController
-} = require('../controllers/balance.controller');
-const { authMiddleware } = require('../middleware/auth.middleware');
-const { adminMiddleware } = require('../middleware/admin.middleware');
+import { Router } from 'express';
+import BalanceController from '../controllers/balance.controller.js';
+import { authMiddleware } from '../middleware/auth.middleware.js';
+import { adminMiddleware } from '../middleware/admin.middleware.js';
 
-const router = express.Router();
+const router = Router();
 
-// Ruta para obtener el saldo del usuario autenticado
-router.get('/me', authMiddleware, getBalanceMeController);
+router.get('/me', authMiddleware, BalanceController.getBalanceMe);
 
-// Ruta para obtener el saldo por usuario ID (requiere ser administrador)
-router.get('/:usuario_id', adminMiddleware, getBalanceController);
+router.get('/:usuario_id', adminMiddleware, BalanceController.getBalance);
+router.post('/', adminMiddleware, BalanceController.createInitialBalance);
+router.put('/:usuario_id', adminMiddleware, BalanceController.updateBalance);
+router.delete('/:usuario_id', adminMiddleware, BalanceController.deleteBalance);
 
-// Ruta para crear un nuevo registro de saldo (requiere ser administrador)
-router.post('/', adminMiddleware, createInitialBalanceController);
-
-// Ruta para actualizar el saldo por usuario ID (requiere ser administrador)
-router.put('/:usuario_id', adminMiddleware, updateBalanceController);
-
-// Ruta para eliminar un registro de saldo por usuario ID (requiere ser administrador)
-router.delete('/:usuario_id', adminMiddleware, deleteBalanceController);
-
-module.exports = router;
+export default router;

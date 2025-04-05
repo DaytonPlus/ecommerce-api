@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "API para ecommerce",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "dev": "nodemon --experimental-vm-modules src/index.js",
     "test": "jest --setupFiles ./tests/setup.js --coverage",
     "doc": "jsdoc -c jsdoc.json"
   },

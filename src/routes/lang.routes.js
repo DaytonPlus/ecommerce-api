@@ -1,9 +1,8 @@
-const { Router } = require('express');
-const { changeLanguageController } = require('../controllers/lang.controller');
+import { Router } from 'express';
+import { changeLanguageController } from '../controllers/lang.controller.js';
 
 const router = Router();
 
-// Ruta para cambiar el idioma
 router.get('/lang', changeLanguageController);
 
-module.expots = router;
+export default router;
