@@ -44,9 +44,13 @@ Para instalar y ejecutar este proyecto localmente, sigue estos pasos:
    ```
 4. Configura las variables de entorno en un archivo `.env`:
    ```env
-   PORT=3000
-   DATABASE_URL=postgresql://username:password@localhost:5432/ecommerce
-   JWT_SECRET=your_jwt_secret
+   DB_USER=your_username
+   DB_HOST=localhost
+   DB_NAME=ecommerce
+   DB_PASSWORD=your_password
+   DB_PORT=5432
+   JWT_SECRET=your_jwt_secret_key
+   API_PORT=8000
    ```
 
 ## 📦 Uso
@@ -64,16 +68,6 @@ npm start
 Para ejecutar las pruebas:
 ```bash
 npm test
-```
-
-Para ejecutar las pruebas en modo watch:
-```bash
-npm run test:watch
-```
-
-Para generar el reporte de cobertura:
-```bash
-npm run test:coverage
 ```
 
 ## 📚 Documentación de la API
