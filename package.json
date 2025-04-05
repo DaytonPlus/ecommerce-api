@@ -7,8 +7,12 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon --experimental-vm-modules src/index.js",
-    "test": "jest --setupFiles ./tests/setup.js --coverage",
-    "doc": "jsdoc -c jsdoc.json"
+    "doc": "jsdoc -c jsdoc.json",
+    "test": "jest --config jest.config.cjs --setupFiles ./tests/setup.js",
+    "db:migrate": "node ./scripts/migrate.js",
+    "db:seed": "node ./scripts/seed.js",
+    "db:drop": "node ./scripts/drop.js",
+    "db:reset": "node ./scripts/reset.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

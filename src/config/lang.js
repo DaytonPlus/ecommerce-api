@@ -4,7 +4,7 @@ import middleware from 'i18next-http-middleware';
 import path from 'path';
 import fs from 'fs';
 
-const locales = path.join(process.cwd(), 'locales');
+const locales = path.join(process.cwd(), 'src', 'locales');
 const langsPath = path.join(locales, 'langs.json');
 const { langNames, supportedLngs } = JSON.parse(fs.readFileSync(langsPath, 'utf8'));
 

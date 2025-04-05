@@ -1,0 +1,12 @@
+{
+  "tables": [
+    "users",
+    "balances",
+    "categories",
+    "products",
+    "orders",
+    "orders_items",
+    "cancellation_requests",
+    "carts"
+  ]
+}
