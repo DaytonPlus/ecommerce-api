@@ -23,6 +23,7 @@
     "i18next": "^20.3.0",
     "i18next-fs-backend": "^2.6.0",
     "i18next-http-middleware": "^3.7.2",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^8.5.1",
     "pg": "^8.6.0"
   },

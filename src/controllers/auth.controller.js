@@ -2,14 +2,30 @@ import { pool } from '../config/database.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import UserModel from '../models/user.model.js';
+import { registerSchema, loginSchema } from '../schemas/user.schema.js';
 
 class AuthController {
   async register(req, res) {
     try {
-      if (req.body.is_admin === true) {
+      const { error } = registerSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+      
+      if (req.body.is_admin) {
         return res.status(403).json({ message: req.t('admin_registration_not_allowed') });
       }
-      const user = await UserModel.createUserInDB(req.body);
+      
+      const user = await UserModel.createUser(req.body);
+      
+      if(!user) {
+        throw new Error(JSON.stringify(user));
+      }
+      
       const token = jwt.sign(
         { userId: user.id },
         process.env.JWT_SECRET,
@@ -24,11 +40,20 @@ class AuthController {
 
   async login(req, res) {
     try {
-      const { email, password } = req.body;
-      const user = await UserModel.findUserByEmail(email);
-      if (!user || !(await bcrypt.compare(password, user.password))) {
+      const { error } = loginSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+      
+      const user = await UserModel.findUserByEmail(req.email);
+      if (!user || !(await bcrypt.compare(req.password, user.password))) {
         return res.status(401).json({ message: req.t('invalid_credentials') });
       }
+      
       const token = jwt.sign(
         { userId: user.id, name: user.name, email: user.email, is_admin: user.is_admin },
         process.env.JWT_SECRET,

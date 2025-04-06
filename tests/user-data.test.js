@@ -11,17 +11,17 @@ const users = [{
   password: 'max',
   is_admin: false
 }, {
-  name: 'Jhon',
-  email: 'jhon@user.local',
-  password: 'jhon',
+  name: 'Vex',
+  email: 'vex@user.local',
+  password: 'vex',
   is_admin: false
 }];
 
 (async () => {
   for(let user of users) {
-    let exists = UserModel.findUserByEmail(user.email);
+    let exists = await UserModel.findUserByEmail(user.email);
     let res = exists ? 'User alrrady exists!' : await UserModel.createUser(user);
-    console.log(user.email, res);
+    console.log(user.email, res, exists);
   }
   process.exit(1);
 })();

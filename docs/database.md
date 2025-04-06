@@ -99,7 +99,7 @@ This table stores order cancellation requests.
 ## ER Diagram
 Below is the Entity-Relationship (ER) diagram representing the database schema.
 
-![ER Diagram](link-to-your-er-diagram-image)
+![ER Diagram](./ecommerce-api-database-der.png)
 
 ## Contact
 For further information or questions, please contact [support@yourdomain.com](mailto:support@yourdomain.com).

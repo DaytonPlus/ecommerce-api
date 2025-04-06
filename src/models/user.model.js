@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 
 class UserModel {
   async createUser(user) {
+    if(!user.password || user.password === '') {
+      return null;
+    }
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const { rows } = await pool.query(
       'INSERT INTO users (name, email, password, is_admin) VALUES ($1, $2, $3, $4) RETURNING *',
@@ -36,6 +39,15 @@ class UserModel {
 
   async deleteUser(id) {
     await pool.query('DELETE FROM users WHERE id = $1', [id]);
+  }
+  
+  serializeUser(user) {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      is_admin: user.is_admin
+    };
   }
 }
 
