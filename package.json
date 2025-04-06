@@ -6,13 +6,14 @@
   "type": "module",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon --experimental-vm-modules src/index.js",
+    "dev": "nodemon src/index.js",
     "doc": "jsdoc -c jsdoc.json",
-    "test": "mocha --experimental-modules",
-    "db:migrate": "node ./scripts/migrate.js",
-    "db:seed": "node ./scripts/seed.js",
-    "db:drop": "node ./scripts/drop.js",
-    "db:reset": "node ./scripts/reset.js"
+    "setup": "npm run db:drop && npm run db:migrate && npm run db:seed",
+    "test": "mocha tests/*.test.js",
+    "db:migrate": "node scripts/migrate.js",
+    "db:seed": "node scripts/seed.js",
+    "db:drop": "node scripts/drop.js",
+    "db:reset": "node scripts/reset.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -28,7 +29,6 @@
     "pg": "^8.6.0"
   },
   "devDependencies": {
-    "chai": "^5.2.0",
     "jsdoc": "^3.6.7",
     "mocha": "^11.1.0",
     "nodemon": "latest",

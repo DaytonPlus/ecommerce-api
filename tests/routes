@@ -1,0 +1,436 @@
+import request from 'supertest';
+import assert from 'assert';
+import startServer from '../src/server.js';
+
+describe('Routes', async () => {
+  let server = await startServer(true);
+  let yourAuthToken;
+  let adminAuthToken;
+
+  // Auth Routes
+  describe('Auth Routes', () => {
+    it('should register a new user', async () => {
+      const res = await request(server)
+        .post('/api/auth/register')
+        .send({ username: 'testuser', password: 'testpass' });
+
+      assert.strictEqual(res.status, 201);
+      assert.deepStrictEqual(res.body, { message: 'User registered successfully' });
+    });
+
+    it('should login a user', async () => {
+      const res = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'testuser', password: 'testpass' });
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.token);
+
+      yourAuthToken = res.body.token; // Guarda el token para usarlo en otras pruebas
+    });
+
+    it('should return 401 for invalid credentials', async () => {
+      const res = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'testuser', password: 'wrongpass' });
+
+      assert.strictEqual(res.status, 401);
+      assert.deepStrictEqual(res.body, { message: 'Invalid credentials' });
+    });
+
+    it('should login an admin user', async () => {
+      const res = await request(server)
+        .post('/api/auth/login')
+        .send({ username: 'adminuser', password: 'adminpass' });
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.token);
+
+      adminAuthToken = res.body.token; // Guarda el token de admin para usarlo en otras pruebas
+    });
+  });
+
+  // Cart Routes
+  describe('Cart Routes', () => {
+    it('should add item to user cart', async () => {
+      const res = await request(server)
+        .post('/api/cart/add')
+        .set('Authorization', `Bearer ${yourAuthToken}`)
+        .send({ productId: 1, quantity: 2 });
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Item added to cart' });
+    });
+
+    it('should get user cart items', async () => {
+      const res = await request(server)
+        .get('/api/cart/user')
+        .set('Authorization', `Bearer ${yourAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should delete user cart', async () => {
+      const res = await request(server)
+        .delete('/api/cart/user')
+        .set('Authorization', `Bearer ${yourAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Cart deleted successfully' });
+    });
+
+    it('should remove item from user cart', async () => {
+      const res = await request(server)
+        .delete('/api/cart/user/remove/1')
+        .set('Authorization', `Bearer ${yourAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Item removed from cart' });
+    });
+
+    it('should checkout user cart', async () => {
+      const res = await request(server)
+        .post('/api/cart/user/checkout')
+        .set('Authorization', `Bearer ${yourAuthToken}`)
+        .send({ shipping_address: '123 Test St' });
+
+      assert.strictEqual(res.status, 201);
+      assert.deepStrictEqual(res.body, { message: 'Order created successfully' });
+    });
+  });
+
+  // User Routes
+  describe('User Routes', () => {
+    it('should get user information', async () => {
+      const res = await request(server)
+        .get('/api/users/me')
+        .set('Authorization', `Bearer ${yourAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.username);
+    });
+
+    it('should create a new user', async () => {
+      const res = await request(server)
+        .post('/api/users')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ username: 'newuser', password: 'newpass' });
+
+      assert.strictEqual(res.status, 201);
+      assert.deepStrictEqual(res.body, { message: 'User created successfully' });
+    });
+
+    it('should get all users', async () => {
+      const res = await request(server)
+        .get('/api/users')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should get a user by id', async () => {
+      const res = await request(server)
+        .get('/api/users/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.username);
+    });
+
+    it('should update a user', async () => {
+      const res = await request(server)
+        .put('/api/users/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ username: 'updateduser', password: 'updatedpass' });
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'User updated successfully' });
+    });
+
+    it('should delete a user', async () => {
+      const res = await request(server)
+        .delete('/api/users/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'User deleted successfully' });
+    });
+  });
+
+  // Balance Routes
+  describe('Balance Routes', () => {
+    it('should get user balance', async () => {
+      const res = await request(server)
+        .get('/api/balance/me')
+        .set('Authorization', `Bearer ${yourAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.balance);
+    });
+
+    it('should create initial balance', async () => {
+      const res = await request(server)
+        .post('/api/balance')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ userId: 1, initialBalance: 100 });
+
+      assert.strictEqual(res.status, 201);
+      assert.strictEqual(res.body.balance, 100);
+    });
+
+    it('should get balance by user id', async () => {
+      const res = await request(server)
+        .get('/api/balance/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.balance);
+    });
+
+    it('should update balance', async () => {
+      const res = await request(server)
+        .put('/api/balance/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ balance: 200 });
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(res.body.balance, 200);
+    });
+
+    it('should delete balance', async () => {
+      const res = await request(server)
+        .delete('/api/balance/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Balance deleted successfully' });
+    });
+  });
+
+  // Order Routes
+  describe('Order Routes', () => {
+    it('should create an order', async () => {
+      const res = await request(server)
+        .post('/api/orders')
+        .set('Authorization', `Bearer ${yourAuthToken}`)
+        .send({ total: 100, shipping_address: '123 Test St' });
+
+      assert.strictEqual(res.status, 201);
+      assert.deepStrictEqual(res.body, { message: 'Order created successfully' });
+    });
+
+    it('should get user orders', async () => {
+      const res = await request(server)
+        .get('/api/orders/me')
+        .set('Authorization', `Bearer ${yourAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should get all orders', async () => {
+      const res = await request(server)
+        .get('/api/orders')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should get an order by id', async () => {
+      const res = await request(server)
+        .get('/api/orders/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.total);
+    });
+
+    it('should update an order', async () => {
+      const res = await request(server)
+        .put('/api/orders/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ total: 200 });
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(res.body.total, 200);
+    });
+
+    it('should delete an order', async () => {
+      const res = await request(server)
+        .delete('/api/orders/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Order deleted successfully' });
+    });
+
+    it('should request order cancellation', async () => {
+      const res = await request(server)
+        .post('/api/orders/cancel/1')
+        .set('Authorization', `Bearer ${yourAuthToken}`)
+        .send({ reason: 'Changed my mind' });
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Cancellation request registered' });
+    });
+  });
+
+  // Category Routes
+  describe('Category Routes', () => {
+    it('should get all categories', async () => {
+      const res = await request(server)
+        .get('/api/categories');
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should get a category by id', async () => {
+      const res = await request(server)
+        .get('/api/categories/1');
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.name);
+    });
+
+    it('should create a new category', async () => {
+      const res = await request(server)
+        .post('/api/categories')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ name: 'New Category' });
+
+      assert.strictEqual(res.status, 201);
+      assert.deepStrictEqual(res.body, { message: 'Category created successfully' });
+    });
+
+    it('should update a category', async () => {
+      const res = await request(server)
+        .put('/api/categories/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ name: 'Updated Category' });
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(res.body.name, 'Updated Category');
+    });
+
+    it('should delete a category', async () => {
+      const res = await request(server)
+        .delete('/api/categories/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Category deleted successfully' });
+    });
+  });
+
+  // Product Routes
+  describe('Product Routes', () => {
+    it('should get all products', async () => {
+      const res = await request(server)
+        .get('/api/products');
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should get a product by id', async () => {
+      const res = await request(server)
+        .get('/api/products/1');
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.name);
+    });
+
+    it('should create a new product', async () => {
+      const res = await request(server)
+        .post('/api/products')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ name: 'New Product', price: 20 });
+
+      assert.strictEqual(res.status, 201);
+      assert.deepStrictEqual(res.body, { message: 'Product created successfully' });
+    });
+
+    it('should update a product', async () => {
+      const res = await request(server)
+        .put('/api/products/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ name: 'Updated Product', price: 30 });
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(res.body.name, 'Updated Product');
+    });
+
+    it('should delete a product', async () => {
+      const res = await request(server)
+        .delete('/api/products/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Product deleted successfully' });
+    });
+
+    it('should search products', async () => {
+      const res = await request(server)
+        .get('/api/products/search?name=New');
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+  });
+
+  // Cancellation Request Routes
+  describe('Cancellation Request Routes', () => {
+    it('should create a cancellation request', async () => {
+      const res = await request(server)
+        .post('/api/cancellation_requests/orders/1')
+        .set('Authorization', `Bearer ${yourAuthToken}`)
+        .send({ reason: 'Changed my mind' });
+
+      assert.strictEqual(res.status, 200);
+      assert.deepStrictEqual(res.body, { message: 'Cancellation request registered' });
+    });
+
+    it('should get all cancellation requests', async () => {
+      const res = await request(server)
+        .get('/api/cancellation_requests')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(Array.isArray(res.body));
+    });
+
+    it('should get a cancellation request by id', async () => {
+      const res = await request(server)
+        .get('/api/cancellation_requests/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`);
+
+      assert.strictEqual(res.status, 200);
+      assert.ok(res.body.reason);
+    });
+
+    it('should update a cancellation request', async () => {
+      const res = await request(server)
+        .put('/api/cancellation_requests/1')
+        .set('Authorization', `Bearer ${adminAuthToken}`)
+        .send({ status: 'approved' });
+
+      assert.strictEqual(res.status, 200);
+      assert.strictEqual(res.body.status, 'approved');
+    });
+  });
+
+  // Language Routes
+  describe('Language Routes', () => {
+    it('should change the language', async () => {
+      const res = await request(server)
+        .get('/api/lang?lang=es');
+
+      assert.ok(res.headers['location']);
+      assert.ok(res.headers['set-cookie']);
+    });
+  });
+});

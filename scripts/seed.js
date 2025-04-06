@@ -15,10 +15,10 @@ import { pool } from "../src/config/database.js";
     
     // Insert users
     const usersQuery = `
-      INSERT INTO users (id, name, email, password) VALUES 
+      INSERT INTO users (id, name, email, password, is_admin) VALUES 
       ${await Promise.all(data.users.map(async (user) => {
         const hashedPassword = await bcrypt.hash(user.password, 10);
-        return `(${user.id}, '${user.name}', '${user.email}', '${hashedPassword}')`;
+        return `(${user.id}, '${user.name}', '${user.email}', '${hashedPassword}', '${user.is_admin || false}')`;
       })).then(results => results.join(', '))}
       ON CONFLICT (id) DO NOTHING;
     `;

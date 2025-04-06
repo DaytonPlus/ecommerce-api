@@ -7,7 +7,7 @@ import routes from "./routes.js";
 import errorHandler from "./middleware/error.middleware.js";
 
 
-const startServer = async () => {
+const startServer = async (debug = false) => {
   try {
     const { i18next, middleware } = await initI18n();
 
@@ -24,13 +24,19 @@ const startServer = async () => {
 
     // Connect to the database and start the server
     await pool.connect();
+    
     app.listen(PORT, () => {
-      console.log(i18next.t("server_running", { port: PORT }));
+      if (!debug) {
+        console.log(i18next.t("server_running", { port: PORT }));
+      }
     });
+    
+    return app;
   } catch (err) {
     console.error("Error starting server:", err.message);
     process.exit(1);
   }
+  return null;
 };
 
 export default startServer;
