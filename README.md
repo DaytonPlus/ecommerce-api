@@ -2,15 +2,18 @@
 
 ![E-Commerce API](https://img.shields.io/badge/E--Commerce-API-blue.svg)
 ![Node.js](https://img.shields.io/badge/Node.js-16.x-green)
-![Express](https://img.shields.io/badge/Express-4.x-blue)
+![Express](https://img.shields.io/badge/Express-4.17.1-blue)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13.x-blue)
-![Jest](https://img.shields.io/badge/Jest-26.x-brightgreen)
+![Jest](https://img.shields.io/badge/Jest-27.x-brightgreen)
+![Joi](https://img.shields.io/badge/Joi-17.x-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-brightgreen)
 
 ## 📄 Descripción
-Una poderosa API para comercio electrónico que permite gestionar productos, pedidos y usuarios de manera eficiente. Construida con Node.js, Express y PostgreSQL, esta API está diseñada para ser robusta, escalable y fácil de mantener.
+
+Una poderosa API para comercio electrónico que permite gestionar productos, pedidos y usuarios de manera eficiente. Construida con Node.js, Express y PostgreSQL, esta API está diseñada para ser robusta, segura y fácil de usar.
 
 ## 🌟 Características
+
 - 🛍️ **Gestión de productos**: Crear, actualizar, eliminar y listar productos.
 - 📦 **Gestión de pedidos**: Crear, actualizar, eliminar y listar pedidos.
 - 👤 **Gestión de usuarios**: Registro, inicio de sesión y gestión de perfiles de usuario.
@@ -19,15 +22,18 @@ Una poderosa API para comercio electrónico que permite gestionar productos, ped
 - 📊 **Cobertura de pruebas**: Generación de informes de cobertura de código con Jest.
 
 ## 🛠️ Tecnologías Utilizadas
+
 - **JavaScript**: Lenguaje principal utilizado en el desarrollo.
 - **Node.js**: Entorno de ejecución para el código JavaScript.
 - **Express**: Framework para el desarrollo de aplicaciones web y API.
 - **PostgreSQL**: Base de datos relacional utilizada para el almacenamiento de datos.
 - **JWT**: Para la autenticación y autorización.
 - **Jest**: Para las pruebas automatizadas.
+- **Joi**: Para la validación de datos.
 - **Nodemon**: Para el reinicio automático del servidor en desarrollo.
 
 ## 🚀 Instalación
+
 Para instalar y ejecutar este proyecto localmente, sigue estos pasos:
 
 1. Clona el repositorio:
@@ -53,7 +59,10 @@ Para instalar y ejecutar este proyecto localmente, sigue estos pasos:
    API_PORT=8000
    ```
 
+Para más detalles sobre la instalación, consulta la [documentación de instalación](./docs/install.md).
+
 ## 📦 Uso
+
 Para iniciar la aplicación en modo desarrollo:
 ```bash
 npm run dev
@@ -65,15 +74,21 @@ npm start
 ```
 
 ## 🧪 Pruebas
+
 Para ejecutar las pruebas:
 ```bash
 npm test
 ```
 
 ## 📚 Documentación de la API
-La documentación completa de la API está disponible en [API Documentation](./docs/API.md).
+
+La documentación completa de la API está disponible en los siguientes enlaces:
+
+- [Documentación de la API](./docs/api.md)
+- [Configuración de la base de datos](./docs/database.md)
 
 ## 🤝 Contribuir
+
 Si deseas contribuir a este proyecto, por favor sigue estos pasos:
 
 1. Haz un fork del repositorio.
@@ -83,10 +98,13 @@ Si deseas contribuir a este proyecto, por favor sigue estos pasos:
 5. Abre un Pull Request.
 
 ## 📄 Licencia
+
 Este proyecto está bajo la licencia MIT.
 
 ## 📧 Contacto
+
 Si tienes alguna pregunta o sugerencia, no dudes en contactarme a [daytonprogrammer@gmail.com](mailto:daytonprogrammer@gmail.com).
 
 ---
+
 ⌨️ con ❤️ por [DaytonPlus](https://github.com/DaytonPlus)

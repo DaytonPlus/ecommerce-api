@@ -6,10 +6,10 @@ This document provides a step-by-step guide to installing and setting up the E-c
 ## Prerequisites
 Before you begin, make sure you have the following software installed on your system:
 
-- **Node.js** (version 16.x or higher)
-- **npm** (Node Package Manager)
-- **PostgreSQL** (version 13.x or higher)
-- **Git** (optional, for cloning the repository)
+- ![Node.js](https://img.shields.io/badge/Node.js-16.x-green) **Node.js** (version 16.x or higher)
+- ![npm](https://img.shields.io/badge/npm-7.x-red) **npm** (Node Package Manager)
+- ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13.x-blue) **PostgreSQL** (version 13.x or higher)
+- ![Git](https://img.shields.io/badge/Git-2.x-yellow) **Git** (optional, for cloning the repository)
 
 ## Step-by-Step Installation
 
@@ -37,7 +37,7 @@ DB_PORT=5432
 JWT_SECRET=your_jwt_secret_key
 API_PORT=8000
 ```
-Replace `your_username`, `your_password`, and `your_jwt_secret` with your actual PostgreSQL username, password, and a secret key for JWT.
+> **Note:** Replace `your_username`, `your_password`, and `your_jwt_secret_key` with your actual PostgreSQL username, password, and a secret key for JWT.
 
 ### 4. Set Up the Database
 Make sure PostgreSQL is running and create a new database.
@@ -62,7 +62,7 @@ Start the application server.
 ```bash
 npm run dev
 ```
-The server should now be running on `http://localhost:3000`.
+> **Note:** The server should now be running on `http://localhost:8000`.
 
 ## Running Tests
 To run the tests, use the following command:
@@ -78,7 +78,4 @@ If you encounter any issues during the installation, check the following:
 - Check if the `.env` file is correctly set up with all necessary environment variables.
 
 ## Contact
-For further assistance, please contact [support@yourdomain.com](mailto:support@yourdomain.com).
-
----
-**Note:** Replace `your_username`, `your_password`, `your_jwt_secret`, and `support@yourdomain.com` with the appropriate values for your setup.
+For further assistance, please contact [daytonprogrammer@gmail.com](mailto:daytonprogrammer@gmail.com).
