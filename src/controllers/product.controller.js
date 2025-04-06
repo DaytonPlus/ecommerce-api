@@ -1,4 +1,5 @@
 import ProductModel from '../models/product.model.js';
+import { productSchema } from '../schemas/product.schema.js';
 
 class ProductController {
   async getProducts(req, res) {
@@ -27,6 +28,15 @@ class ProductController {
 
   async createProduct(req, res) {
     try {
+      const { error } = productSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       const newProduct = await ProductModel.createProduct(req.body);
       res.status(201).json(newProduct);
     } catch (error) {
@@ -38,6 +48,15 @@ class ProductController {
   async updateProduct(req, res) {
     try {
       const id = req.params.id;
+      const { error } = productSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       const updatedProduct = await ProductModel.updateProductById(id, req.body);
       if (!updatedProduct) {
         return res.status(404).json({ message: req.t('product_not_found') });
@@ -62,7 +81,7 @@ class ProductController {
 
   async searchProducts(req, res) {
     try {
-      const filters = req.query; // Los filtros se envían como parámetros de consulta (query params)
+      const filters = req.query;
       const products = await ProductModel.searchProductsBy(filters);
       res.json(products);
     } catch (error) {

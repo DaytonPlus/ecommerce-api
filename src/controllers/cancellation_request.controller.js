@@ -1,14 +1,20 @@
 import CancellationRequestModel from '../models/cancellation_request.model.js';
+import { cancellationRequestSchema } from '../schemas/cancellation_request.schema.js';
 
 class CancellationRequestController {
   async createCancellationRequest(req, res) {
     try {
       const orderId = req.params.orderId;
       const userId = req.user.userId;
-      const reason = req.body.reason;
+      const { reason } = req.body;
 
-      if (!orderId || !reason) {
-        return res.status(400).json({ message: req.t('invalid_data') });
+      const { error } = cancellationRequestSchema.validate({ order_id: orderId, user_id: userId, reason });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
       }
 
       const newRequest = await CancellationRequestModel.createCancellationRequest(orderId, userId, reason);
@@ -46,10 +52,15 @@ class CancellationRequestController {
   async updateCancellationRequestStatus(req, res) {
     try {
       const requestId = req.params.requestId;
-      const status = req.body.status;
+      const { status } = req.body;
 
-      if (!requestId || !status) {
-        return res.status(400).json({ message: req.t('invalid_data') });
+      const { error } = cancellationRequestSchema.validate({ status });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
       }
 
       const updatedRequest = await CancellationRequestModel.updateCancellationRequestStatus(requestId, status);

@@ -1,12 +1,22 @@
 import CartModel from '../models/cart.model.js';
 import OrderModel from '../models/order.model.js';
 import BalanceModel from '../models/balance.model.js';
+import { cartSchema } from '../schemas/cart.schema.js';
 
 class CartController {
   async addItemToUserCart(req, res) {
     try {
       const userId = req.user.userId;
       const { productId, quantity } = req.body;
+
+      const { error } = cartSchema.validate({ user_id: userId, product_id: productId, quantity });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
 
       await CartModel.addItemToCartDB(userId, productId, quantity);
       res.status(200).json({ message: req.t('item_added_to_cart') });
@@ -79,6 +89,16 @@ class CartController {
   async createCart(req, res) {
     try {
       const { userId, productId, quantity } = req.body;
+
+      const { error } = cartSchema.validate({ user_id: userId, product_id: productId, quantity });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       await CartModel.createCartDB(userId, productId, quantity);
       res.status(201).json({ message: req.t('cart_created_successfully') });
     } catch (error) {
@@ -91,6 +111,16 @@ class CartController {
     try {
       const cartId = req.params.id;
       const { userId, productId, quantity } = req.body;
+
+      const { error } = cartSchema.validate({ user_id: userId, product_id: productId, quantity });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       await CartModel.updateCartDB(cartId, userId, productId, quantity);
       res.status(200).json({ message: req.t('cart_updated_successfully') });
     } catch (error) {

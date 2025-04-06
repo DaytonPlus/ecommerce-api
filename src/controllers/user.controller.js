@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import UserModel from '../models/user.model.js';
 import BalanceModel from '../models/balance.model.js';
+import { userSchema } from '../schemas/user.schema.js';
 
 class UserController {
   async createUser(req, res) {
@@ -8,6 +9,16 @@ class UserController {
       if (!req.user || !req.user.is_admin) {
         return res.status(401).json({ message: req.t('access_denied') });
       }
+
+      const { error } = userSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       const user = await UserModel.createUser(req.body);
       await BalanceModel.createInitialBalance(user.id);
       res.status(201).json(user);
@@ -55,6 +66,15 @@ class UserController {
       }
 
       const id = req.params.id;
+      const { error } = userSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       await UserModel.updateUser(id, req.body);
       res.status(200).json({ message: req.t('user_updated_successfully') });
     } catch (error) {

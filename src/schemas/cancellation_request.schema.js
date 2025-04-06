@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const cancellationRequestSchema = Joi.object({
   order_id: Joi.number().integer().required().messages({
@@ -17,4 +17,4 @@ const cancellationRequestSchema = Joi.object({
   })
 });
 
-module.exports = { cancellationRequestSchema };
+export { cancellationRequestSchema };

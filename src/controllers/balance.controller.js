@@ -1,4 +1,5 @@
 import BalanceModel from '../models/balance.model.js';
+import { balanceSchema } from '../schemas/balance.schema.js';
 
 class BalanceController {
   async getBalanceMe(req, res) {
@@ -51,8 +52,13 @@ class BalanceController {
     try {
       const { userId, initialBalance } = req.body;
       
-      if (!userId || isNaN(initialBalance)) {
-        return res.status(400).json({ message: req.t('invalid_data') });
+      const { error } = balanceSchema.validate({ user_id: userId, balance: initialBalance });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_data'), details });
       }
 
       const newBalance = await BalanceModel.createInitialBalance(userId, initialBalance || 0.00);

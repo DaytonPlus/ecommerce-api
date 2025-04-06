@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const cartSchema = Joi.object({
   user_id: Joi.number().integer().required().messages({
@@ -16,4 +16,4 @@ const cartSchema = Joi.object({
   })
 });
 
-module.exports = { cartSchema };
+export { cartSchema };

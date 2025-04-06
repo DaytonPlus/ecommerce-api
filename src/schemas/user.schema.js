@@ -1,6 +1,6 @@
-import { Joi } from 'joi';
+import Joi from 'joi';
 
-const registerSchema = Joi.object({
+const userSchema = Joi.object({
   name: Joi.string().required().min(3).max(50).messages({
     'string.empty': 'name_required',
     'string.min': 'name_min_length',
@@ -27,4 +27,5 @@ const loginSchema = Joi.object({
   })
 });
 
-export default { registerSchema, loginSchema };
+
+export { userSchema, loginSchema };

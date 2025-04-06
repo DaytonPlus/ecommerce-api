@@ -1,18 +1,22 @@
-import { pool } from '../src/config/database';
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
 
-beforeAll(async () => {
-  execSync('npm run db:reset');
-  execSync('npm run db:seed');
-});
+try {
+  console.log('Setting up database for tests...');
+  
+  // Drop the database
+  console.log('Running npm run db:drop...');
+  execSync('npm run db:drop', { stdio: 'inherit' });
 
-afterAll(async () => {
-  await pool.end();
-});
+  // Migrate the database
+  console.log('Running npm run db:migrate...');
+  execSync('npm run db:migrate', { stdio: 'inherit' });
 
-afterEach(async () => {
-  const tables = ['users', 'products', 'orders', 'order_items', 'categories', 'carts', 'balances', 'cancellation_requests'];
-  for (const table of tables) {
-    await pool.query(`TRUNCATE TABLE ${table} RESTART IDENTITY CASCADE`);
-  }
-});
+  // Seed the database
+  console.log('Running npm run db:seed...');
+  execSync('npm run db:seed', { stdio: 'inherit' });
+
+  console.log('Database setup completed.');
+} catch (error) {
+  console.error('Error setting up database:', error);
+  process.exit(1);
+}

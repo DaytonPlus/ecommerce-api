@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const balanceSchema = Joi.object({
   user_id: Joi.number().integer().required().messages({
@@ -11,4 +11,4 @@ const balanceSchema = Joi.object({
   })
 });
 
-module.exports = { balanceSchema };
+export { balanceSchema };

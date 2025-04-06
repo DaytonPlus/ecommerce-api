@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../src/index'; // Importa la aplicación correctamente
+import app from '../src/index';
 
 describe('Authentication Endpoints', () => {
   it('should register a new user', async () => {

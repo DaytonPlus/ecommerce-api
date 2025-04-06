@@ -1,4 +1,5 @@
 import CategoryModel from '../models/category.model.js';
+import { categorySchema } from '../schemas/category.schema.js';
 
 class CategoryController {
   async getCategories(req, res) {
@@ -27,6 +28,15 @@ class CategoryController {
 
   async createCategory(req, res) {
     try {
+      const { error } = categorySchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       const newCategory = await CategoryModel.createCategory(req.body);
       res.status(201).json(newCategory);
     } catch (error) {
@@ -38,6 +48,15 @@ class CategoryController {
   async updateCategory(req, res) {
     try {
       const id = req.params.id;
+      const { error } = categorySchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       const updatedCategory = await CategoryModel.updateCategory(id, req.body);
       if (!updatedCategory) {
         return res.status(404).json({ message: req.t('category_not_found') });

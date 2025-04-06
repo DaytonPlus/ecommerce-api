@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const categorySchema = Joi.object({
   name: Joi.string().required().min(3).max(255).messages({
@@ -9,4 +9,4 @@ const categorySchema = Joi.object({
   description: Joi.string().optional()
 });
 
-module.exports = { categorySchema };
+export { categorySchema };

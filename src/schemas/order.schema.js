@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import Joi from 'joi';
 
 const orderSchema = Joi.object({
   user_id: Joi.number().integer().required().messages({
@@ -22,4 +22,4 @@ const orderSchema = Joi.object({
   })
 });
 
-module.exports = { orderSchema };
+export { orderSchema };

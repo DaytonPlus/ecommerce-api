@@ -1,11 +1,21 @@
 import OrderModel from '../models/order.model.js';
 import CancellationRequestModel from '../models/cancellation_request.model.js';
+import { orderSchema } from '../schemas/order.schema.js';
 
 class OrderController {
   async createOrder(req, res) {
     try {
       const userId = req.user.userId;
       const { total, shipping_address, status, shipping_status } = req.body;
+
+      const { error } = orderSchema.validate({ user_id: userId, total, status, shipping_address, shipping_status });
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
 
       const newOrder = await OrderModel.createOrder({
         user_id: userId,
@@ -60,6 +70,15 @@ class OrderController {
   async updateOrder(req, res) {
     try {
       const id = req.params.id;
+      const { error } = orderSchema.validate(req.body);
+      if (error) {
+        const details = error.details.map((detail) => ({
+          message: req.t(detail.message),
+          path: detail.path.join('.')
+        }));
+        return res.status(400).json({ message: req.t('invalid_fields'), details });
+      }
+
       const updatedOrder = await OrderModel.updateOrderById(id, req.body);
       if (!updatedOrder) {
         return res.status(404).json({ message: req.t('order_not_found') });
