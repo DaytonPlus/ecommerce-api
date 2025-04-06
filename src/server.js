@@ -14,7 +14,6 @@ const startServer = async (debug = false) => {
     const app = express();
     const PORT = process.env.API_PORT || 5000;
 
-    // Middleware setup
     app.use(cors());
     app.use(helmet());
     app.use(middleware.handle(i18next));
@@ -22,7 +21,6 @@ const startServer = async (debug = false) => {
     app.use("/", routes);
     app.use(errorHandler);
 
-    // Connect to the database and start the server
     await pool.connect();
     
     app.listen(PORT, () => {

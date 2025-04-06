@@ -1,0 +1,54 @@
+openapi: 3.0.0
+info:
+  title: E-commerce API
+  description: API documentation for the E-commerce application
+  version: 1.0.0
+
+paths:
+  /api/auth:
+    get:
+      summary: User authentication endpoints
+      tags:
+        - Authentication
+
+  /api/cart:
+    get:
+      summary: User cart endpoints
+      tags:
+        - Cart
+
+  /api/users:
+    get:
+      summary: User management endpoints
+      tags:
+        - Users
+
+  /api/orders:
+    get:
+      summary: Order management endpoints
+      tags:
+        - Orders
+
+  /api/products:
+    get:
+      summary: Product management endpoints
+      tags:
+        - Products
+
+  /api/categories:
+    get:
+      summary: Product category management endpoints
+      tags:
+        - Categories
+
+  /api/balance:
+    get:
+      summary: User balance management endpoints
+      tags:
+        - Balance
+
+  /api/cancellation_requests:
+    get:
+      summary: Order cancellation requests management endpoints
+      tags:
+        - Cancellation Requests
