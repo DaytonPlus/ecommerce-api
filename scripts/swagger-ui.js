@@ -2,18 +2,20 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import startServer from '../src/server.js';
 
-
 const options = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: 'API Documentada con Swagger',
       version: '1.0.0',
-      description: 'Ejemplo de integración de Swagger UI con Express usando ESM',
+      description: 'Swagger UI con Express',
     },
-    servers: [{ url: 'http://localhost:3000' }],
+    servers: [{ url: `http://localhost:8000` }],
   },
-  apis: ['../src/routes/*.js'],
+  apis: [
+    'src/routes.js',
+    'src/routes/*.js'
+  ],
 };
 
 (async () => {
