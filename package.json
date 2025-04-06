@@ -8,7 +8,7 @@
     "start": "node src/index.js",
     "dev": "nodemon --experimental-vm-modules src/index.js",
     "doc": "jsdoc -c jsdoc.json",
-    "test": "jest --config jest.config.cjs --setupFiles ./tests/setup.js",
+    "test": "mocha --experimental-modules",
     "db:migrate": "node ./scripts/migrate.js",
     "db:seed": "node ./scripts/seed.js",
     "db:drop": "node ./scripts/drop.js",
@@ -28,26 +28,11 @@
     "pg": "^8.6.0"
   },
   "devDependencies": {
-    "jest": "^27.0.6",
+    "chai": "^5.2.0",
     "jsdoc": "^3.6.7",
+    "mocha": "^11.1.0",
     "nodemon": "latest",
-    "supertest": "^6.1.3"
-  },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFiles": [
-      "./tests/setup.js"
-    ],
-    "coverageDirectory": "./coverage",
-    "collectCoverageFrom": [
-      "src/**/*.js"
-    ],
-    "coverageReporters": [
-      "json",
-      "lcov",
-      "text",
-      "clover"
-    ]
+    "supertest": "^7.1.0"
   },
   "author": "DaytonPlus",
   "license": "ISC"
