@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "doc": "jsdoc -c jsdoc.json",
+    "doc": "node scripts/swagger-ui.js",
     "setup": "npm run db:drop && npm run db:migrate && npm run db:seed",
     "test": "mocha tests/*.test.js",
     "db:migrate": "node scripts/migrate.js",
@@ -29,10 +29,11 @@
     "pg": "^8.6.0"
   },
   "devDependencies": {
-    "jsdoc": "^3.6.7",
     "mocha": "^11.1.0",
     "nodemon": "latest",
-    "supertest": "^7.1.0"
+    "supertest": "^7.1.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "author": "DaytonPlus",
   "license": "ISC"
