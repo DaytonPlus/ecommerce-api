@@ -9,7 +9,7 @@ class UserModel {
     const hashedPassword = await bcrypt.hash(user.password, 10);
     const { rows } = await pool.query(
       'INSERT INTO users (name, email, password, is_admin) VALUES ($1, $2, $3, $4) RETURNING *',
-      [user.name, user.email, hashedPassword, user.is_admin]
+      [user.name, user.email, hashedPassword, user.is_admin??false]
     );
     return rows[0];
   }

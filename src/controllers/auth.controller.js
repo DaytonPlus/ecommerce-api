@@ -19,7 +19,7 @@ class AuthController {
       if (req.body.is_admin) {
         return res.status(403).json({ message: req.t('admin_registration_not_allowed') });
       }
-
+      
       const user = await UserModel.createUser(req.body);
 
       if (!user) {
@@ -34,6 +34,11 @@ class AuthController {
       res.status(201).json({ token });
     } catch (error) {
       console.log(error);
+      
+      if (error.code === '23505') {
+        return res.status(400).json({ message: req.t('user_already_exists') });
+      }
+      
       res.status(500).json({ message: req.t('error_registering_user') });
     }
   }

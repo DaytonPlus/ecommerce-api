@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
+import morgan from "morgan";
 import { pool } from "./config/database.js";
 import initI18n from "./config/lang.js";
 import routes from "./routes.js";
@@ -18,6 +19,7 @@ const startServer = async (debug = false) => {
     app.use(helmet());
     app.use(middleware.handle(i18next));
     app.use(express.json());
+    app.use(morgan('dev'));
     app.use("/", routes);
     app.use(errorHandler);
 

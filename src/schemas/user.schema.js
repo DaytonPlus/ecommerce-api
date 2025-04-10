@@ -14,7 +14,7 @@ const userSchema = Joi.object({
     'string.empty': 'password_required',
     'string.min': 'password_min_length'
   }),
-  is_admin: Joi.boolean().optional().default(false)
+  is_admin: Joi.boolean().optional()
 });
 
 const loginSchema = Joi.object({

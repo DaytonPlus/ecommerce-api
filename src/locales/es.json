@@ -74,5 +74,12 @@
   "error_fetching_cancellation_requests": "Error al obtener historial de cancelaciones",
   "cancellation_request_not_found": "No existe solicitud de cancelación con este ID",
   "error_fetching_cancellation_request": "Error al cargar detalles de cancelación",
-  "error_updating_cancellation_request_status": "Error actualizando estado - Flujo de trabajo inválido"
+  "error_updating_cancellation_request_status": "Error actualizando estado - Flujo de trabajo inválido",
+  "name_required": "El campo nombre es obligatorio.",
+  "name_min_length": "El nombre debe tener al menos 3 caracteres.",
+  "name_max_length": "El nombre no debe tener más de 50 caracteres.",
+  "email_required": "El campo correo electrónico es obligatorio.",
+  "invalid_email": "La dirección de correo electrónico es inválida.",
+  "password_required": "El campo contraseña es obligatorio.",
+  "password_min_length": "La contraseña debe tener al menos 8 caracteres."
 }
