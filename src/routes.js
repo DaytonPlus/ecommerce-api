@@ -1,5 +1,4 @@
 import { Router } from 'express';
-// import langRoutes from './routes/lang.routes.js';
 import authRoutes from './routes/auth.routes.js';
 import cartRoutes from './routes/cart.routes.js';
 import userRoutes from './routes/user.routes.js';
@@ -11,7 +10,6 @@ import cancellation_requestsRoutes from './routes/cancellation_request.routes.js
 
 const router = Router();
 
-// router.use('/api/lang', langRoutes);
 router.use('/api/auth', authRoutes);
 router.use('/api/cart', cartRoutes);
 router.use('/api/users', userRoutes);

@@ -8,8 +8,8 @@
     { "id": 6, "name": "Diana Prince", "email": "diana.prince@example.com", "password": "D1an4Pr1nc" },
     { "id": 7, "name": "Ethan Hunt", "email": "ethan.hunt@example.com", "password": "E7h4nHunt" },
     { "id": 8, "name": "Fiona Gallagher", "email": "fiona.gallagher@example.com", "password": "F10n4Gall" },
-    { "id": 9, "name": "Adminer", "email": "admin@user.test", "password": "admin", "is_admin": true},
-    { "id": 10, "name": "Adminer2", "email": "admin2@user.test", "password": "admin2", "is_admin": true}
+    { "id": 9, "name": "Adminer", "email": "admin@user.com", "password": "admin", "is_admin": true},
+    { "id": 10, "name": "Adminer2", "email": "admin2@user.com", "password": "admin2", "is_admin": true}
   ],
   "balances": [
     { "id": 1, "user_id": 1, "balance": 1500.0 },

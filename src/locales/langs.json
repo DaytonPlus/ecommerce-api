@@ -1,18 +1,10 @@
 {
   "supportedLngs": [
     "en",
-    "es",
-    "de",
-    "ru",
-    "jp",
-    "ch"
+    "es"
   ],
   "langNames": {
     "en": "Inglés",
-    "es": "Español",
-    "de": "Alemán",
-    "ru": "Ruso",
-    "jp": "Japonés",
-    "ch": "Chino"
+    "es": "Español"
   }
 }

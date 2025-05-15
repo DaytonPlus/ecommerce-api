@@ -13,6 +13,7 @@ const adminMiddleware = async (req, res, next) => {
     req.user = decoded;
 
     const userId = req.user.userId;
+  
     const { rows } = await pool.query('SELECT * FROM usuarios WHERE id = $1', [userId]);
     if (!rows[0] || !rows[0].is_admin) {
       return res.status(401).json({ message: req.t('access_denied') });
