@@ -8,7 +8,6 @@
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
     "setup": "npm run db:drop && npm run db:migrate && npm run db:seed",
-    "test": "mocha tests/*.test.js",
     "db:migrate": "node scripts/migrate.js",
     "db:seed": "node scripts/seed.js",
     "db:drop": "node scripts/drop.js",
